@@ -1,0 +1,16 @@
+# Dependencias
+node_modules/
+
+# Salida de Parcel
+dist/
+.cache/
+.parcel-cache/
+
+# Logs
+npm-debug.log*
+*.log
+
+# Sistema / editor
+.DS_Store
+.vscode/
+.idea/
