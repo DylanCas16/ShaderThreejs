@@ -51,17 +51,17 @@ Para conservar parte de la idea de las ondas del escenario original se añade un
 
 **Coordenadas.** `p = (gl_FragCoord.xy - r/2.) / r.y` centra el origen y normaliza por la altura para ubicar el círculo, siendo este de radio 0,4 para caber en cualquier formato.
 
-**Formas con distancias.** Cada forma se define por su distancia con signo (negativa dentro). La macro `F(d) = smoothstep(e, -e, d)` la convierte en una máscara 0..1 con un borde de un píxel (`e = 1/r.y`), lo que da bordes suaves sin escalones al girar.
+**Formas con distancias.** Cada forma se define por su distancia con signo (negativa dentro). La macro `F(d) = smoothstep(e, -e, d)` la convierte en una máscara con un borde de un píxel (`e = 1/r.y`), lo que genera bordes suaves.
 
-**Construcción del ying yang.** Se parte de la mitad derecha blanca (`F(-p.x)`). Después se superponen cuatro círculos con `mix`: uno blanco de radio 0,2 centrado en (0, 0,2), uno negro de radio 0,2 centrado en (0, -0,2) y dos puntos de radio 0,05 con el color contrario. Así la curva en S aparece sin trazarla explícitamente. Las distancias a los centros (`A` y `B`) se calculan una sola vez y se reutilizan.
+**Construcción del ying yang.** Se parte de la mitad derecha blanca (`F(-p.x)`) para posteriormente superponer cuatro círculos con `mix`: uno blanco de radio 0,2 centrado en (0, 0,2), uno negro de radio 0,2 centrado en (0, -0,2) y dos puntos de radio 0,05 con el color contrario. Las distancias a los centros (`A` y `B`) se calculan una sola vez y se reutilizan.
 
-**Giro.** Se rota el espacio con una matriz `mat2(c,-s,s,c)` con `c=cos(t)`, `s=sin(t)`. Rotar las coordenadas en lugar de la figura permite reutilizar todo el código de dibujo. El giro es continuo y con velocidad lenta y constante (`u_time*.4`), por lo que el movimiento es suave y fluido; el halo usa la distancia sin rotar para que no gire.
+**Giro.** Se rota el espacio con una matriz `mat2(c,-s,s,c)` con `c=cos(t)`, `s=sin(t)`, esto permite reutilizar todo el código de dibujo al utilizar las coordenadas en lugar de la figura. El giro es continuo, con velocidad lenta y constante (`u_time*.4`),provocando un movimiento es suave y fluido.
 
-**Halo.** Fuera del círculo se muestra una paleta coseno `.5+.5*cos(t+vec3(0,2,4))` que cambia de tono despacio con el tiempo, atenuada con `exp(-distancia*6)` y modulada por `sin(l*20 - t*4)`, que crea un latido suave hacia el exterior.
-
-**Iteración.** Se comprobó el aspecto con una emulación del shader en Python/NumPy y se validó la sintaxis con `glslangValidator`. Las versiones iniciales de ondas (suma de senos y distancia mínima a centro y esquinas) se descartaron por resultar confusas o poco fluidas. Para ajustar el tamaño se calcularon `A` y `B` una sola vez, se unificó el tiempo y la velocidad de giro en una variable y se guardó `u_resolution` en `r`. Se eliminó el uso del ratón al decidir que el resultado debía ser independiente del usuario.
+**Halo.** Fuera del círculo se muestra una paleta coseno `.5+.5*cos(t+vec3(0,2,4))` que cambia de tono despacio con el tiempo, está atenuada con `exp(-distancia*6)` y modulada por `sin(l*20 - t*4)` para crear un latido suave hacia el exterior.
 
 A continuación se mostrará un GIF con la ejecución del shader.
+
+![ying yang demo](BookOfShaders/YingYangZen.gif)
 
 ### Fuentes
 
